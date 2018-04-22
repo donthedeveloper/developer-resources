@@ -11,6 +11,6 @@ const resourceApi = require('./resource');
 // router.use('./login', loginApi);
 // router.use('./logout', logoutApi);
 // router.use('./whoami', whoAmIApi);
-router.use('resources, resourceApi');
+router.use('/resource', resourceApi);
 
 module.exports = router;

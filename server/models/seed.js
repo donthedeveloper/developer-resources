@@ -1,8 +1,9 @@
 require('dotenv').config();
-const {db, User, Role, Permission} = require('./index');
+const {db, User, Role, Permission, Resource} = require('./index');
 
 const chalk = require('chalk');
 
+// Users
 const users = [
     {
         email: 'don@test.com',
@@ -32,6 +33,20 @@ const permissions = [
     {name: USERDELETE}
 ];
 
+
+// Resources
+const resources = [{
+    name: 'JS Stuff',
+    description: 'Lots of JS stuff.',
+    url: 'https://jsstuff.com'
+},
+{
+    name: 'PHP Stuff',
+    description: 'Lots of lots of lots of PHP stuff.',
+    url: 'https://phpstuff.com'
+}];
+
+
 db.sync({force:true})
     .then(() => {
         console.log(chalk.blue('Dropped old data.'));
@@ -39,11 +54,11 @@ db.sync({force:true})
         return Role.bulkCreate(roles, {individualHooks: true});
     })
     .then(() => {
-        console.log(chalk.blue('Created roles'));
+        console.log(chalk.blue('Created roles.'));
         return Permission.bulkCreate(permissions, {individualHooks: true});
     })
     .then((permissions) => {
-        console.log(chalk.blue('Created permissions'));
+        console.log(chalk.blue('Created permissions.'));
         permissions.forEach((permission) => {
             const roleIdArr = [];
             switch (permission.name) {
@@ -64,11 +79,16 @@ db.sync({force:true})
         })
     })
     .then(() => {
-
+        console.log(chalk.blue('Associated roles with permissions.'));
         // CREATE USERS
         return User.bulkCreate(users, {individualHooks: true})
     })
+    .then(() => {
+        console.log(chalk.blue('Created users.'));
+        return Resource.bulkCreate(resources, {individualHooks: true});
+    })
     .finally(() => {
+        console.log(chalk.blue('Created resources.'));
         db.close();
     })
     .catch((err) => {

@@ -7,4 +7,4 @@ User.belongsTo(Role);
 Role.belongsToMany(Permission, {through: 'RolePermission'});
 Permission.belongsToMany(Role, {through: 'RolePermission'});
 
-module.exports = {Sequelize,db,User,Role,Permission};
+module.exports = {Sequelize, db, User, Role, Permission, Resource};
