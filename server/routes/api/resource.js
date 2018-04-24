@@ -28,9 +28,9 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const name = req.body.name;
-    const description = req.body.description;
-    const url = req.body.url;
+    const name = req.body.name || '';
+    const description = req.body.description || '';
+    const url = req.body.url || '';
 
     Resource.create({name, description, url})
         .then((resourceCreated) => {
