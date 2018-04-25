@@ -43,9 +43,11 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     const id = req.params.id;
-    const name = req.body.name;
+    const name = req.body.name || '';
     const description = req.body.description;
-    const url = req.body.url;
+    const url = req.body.url || '';
+
+    
 
     Resource.update({name, description, url}, {
         where: {id},
@@ -53,6 +55,7 @@ router.patch('/:id', (req, res) => {
     })
         .then((updatedCount) => {
             if (updatedCount > 0) {
+                console.log('updated count:', updatedCount);
                 res.sendStatus(204);
             } else {
                 res.sendStatus(404);
