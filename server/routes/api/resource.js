@@ -21,6 +21,7 @@ router.get('/:id', (req, res) => {
     Resource.findById(id)
         .then((resource) => {
             res.status(200).json(resource);
+            // TODO: where's da 404 at?
         })
         .catch((err) => {
             res.status(400).send(err);
@@ -72,7 +73,7 @@ router.delete('/:id', (req, res) => {
     Resource.destroy({where: {id}})
         .then((deletedCount) => {
             if (deletedCount > 0) {
-                res.sendStatus(204)
+                res.sendStatus(204);
             } else {
                 res.sendStatus(404);
             }

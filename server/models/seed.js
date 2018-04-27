@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {db, User, Role, Permission, Resource} = require('./index');
+const {db, User, Role, Permission, Resource, Category} = require('./index');
 
 const chalk = require('chalk');
 
@@ -46,6 +46,12 @@ const resources = [{
     url: 'https://phpstuff.com'
 }];
 
+const categories = [{
+    name: 'JavaScript'
+}, {
+    name: 'CSS'
+}];
+
 
 db.sync({force:true})
     .then(() => {
@@ -87,8 +93,12 @@ db.sync({force:true})
         console.log(chalk.blue('Created users.'));
         return Resource.bulkCreate(resources, {individualHooks: true});
     })
-    .finally(() => {
+    .then(() => {
         console.log(chalk.blue('Created resources.'));
+        return Category.bulkCreate(categories, {individualHooks: true});
+    })
+    .finally(() => {
+        console.log(chalk.blue('Created categories.'));
         db.close();
     })
     .catch((err) => {
