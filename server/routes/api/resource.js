@@ -44,11 +44,9 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     const id = req.params.id;
-    const name = req.body.name || '';
+    const name = req.body.name || ''; // TODO: do we need this?
     const description = req.body.description;
-    const url = req.body.url || '';
-
-    
+    const url = req.body.url || ''; // TODO: do we need this?
 
     Resource.update({name, description, url}, {
         where: {id},
@@ -63,14 +61,16 @@ router.patch('/:id', (req, res) => {
             }
         })
         .catch((err) => {
-            res.status(400).send(err);
+            res.status(400).json(err);
         })
 });
 
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
 
-    Resource.destroy({where: {id}})
+    Resource.destroy({
+        where: {id}
+    })
         .then((deletedCount) => {
             if (deletedCount > 0) {
                 res.sendStatus(204);
@@ -79,7 +79,7 @@ router.delete('/:id', (req, res) => {
             }
         })
         .catch((err) => {
-            res.status(400).send(err);
+            res.status(400).json(err);
         });
 });
 
