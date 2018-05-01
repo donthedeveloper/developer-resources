@@ -33,9 +33,9 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const name = req.body.name || '';
+    const name = req.body.name;
 
-    Category.create({name})
+    Category.create(req.body)
         .then((category) => {
             res.status(201).json(category);
         })

@@ -4,29 +4,27 @@ const Category = db.define('category', {
     name: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
+        defaultValue: '',
         validate: {
             notEmpty: {
                 args: true,
                 msg: 'Please provide a name.'
             },
-            // TODO: reference for custom validation
-            // isUnique(name) {
-            //     Category.findOne({
-            //         where: {name}
-            //     })
-            //         .then((category) => {
-            //             console.log(category);
-            //             if (category) {
-            //                 throw new Error('This category name already exists.');
-            //             }
-            //         })
-            // }
+            isUnique(name, next) {
+                Category.findOne({
+                    where: {name}
+                })
+                    .then((category) => {
+                        const error = category ? new Error('This category name already exists.') : null;
+                        return next(error);
+                    })
+                    .catch((err) => {
+                        return next(err);
+                    });
+            }
         }
     }
 });
-
-Category.isUnique = function(model) {
-    console.log('model:', model);
-}
 
 module.exports = {Sequelize, db, Category};
