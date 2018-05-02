@@ -7,9 +7,9 @@ const {Category} = require('../server/models');
 
 describe('Category Model', () => {
     describe('Add a resource to the database', () => {
-        it('responds with the object that was created', (done) => {
-            const categoryName = 'TestCategoryName';
+        const categoryName = 'TestCategoryName';
 
+        it('responds with the object that was created when successful', (done) => {
             Category.create({
                 name: categoryName
             })
@@ -21,5 +21,59 @@ describe('Category Model', () => {
                 done(err);
             });
         });
+
+        it('does not allow creation when name is not provided as a key', (done) => {
+            Category.create()
+            .then((category) => {
+                done('Invalidation of name did not work.');
+            })
+            .catch((err) => {
+                if (err.errors[0].message) {
+                    done();
+                }
+            });
+        });
+
+        it('does not allow an empty string for the key', (done) => {
+            Category.create()
+            .then((category) => {
+                done('Invalidation of name did not work.');
+            })
+            .catch((err) => {
+                if (err.errors[0].message) {
+                    done();
+                }
+            });
+        });
+
+        it('does not allow duplicate names', (done) => {
+            Category.create({
+                name: categoryName
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Category.create()
+            .then((category) => {
+                done('Invalidation of name did not work.');
+            })
+            .catch((err) => {
+                if (err.errors[0].message) {
+                    done();
+                }
+            });
+        });
+
+        afterEach(function() {
+            Category.destroy({
+                where: {
+                    name: categoryName
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        })
     });
 });

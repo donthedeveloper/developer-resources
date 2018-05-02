@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     const id = req.params.id;
-    const name = req.body.name; // TODO: do we need to convert to ''?
+    const name = req.body.name;
 
     Category.update(req.body, {
         where: {id},
