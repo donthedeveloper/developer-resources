@@ -36,12 +36,12 @@ router.post('/', (req, res) => {
     const name = req.body.name;
 
     Category.create(req.body)
-        .then((category) => {
-            res.status(201).json(category);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
+    .then((category) => {
+        res.status(201).json(category);
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+    });
 });
 
 router.patch('/:id', (req, res) => {
@@ -52,16 +52,16 @@ router.patch('/:id', (req, res) => {
         where: {id},
         fields: Object.keys(req.body)
     })
-        .then((updatedCount) => {
-            if (updatedCount > 0) {
-                res.sendStatus(204);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
+    .then((updatedCount) => {
+        if (updatedCount > 0) {
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
@@ -70,16 +70,16 @@ router.delete('/:id', (req, res) => {
     Category.destroy({
         where: {id}
     })
-        .then((deletedCount) => {
-            if (deletedCount > 0) {
-                res.sendStatus(204);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
+    .then((deletedCount) => {
+        if (deletedCount > 0) {
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+    });
 });
 
 module.exports = router;

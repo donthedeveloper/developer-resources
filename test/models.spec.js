@@ -2,11 +2,10 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const expect = chai.expect;
-// chai.use(chaiHttp);
 const {Category} = require('../server/models');
 
 describe('Category Model', () => {
-    describe('Add a resource to the database', () => {
+    describe('Add a category to the database', () => {
         const categoryName = 'TestCategoryName';
 
         it('responds with the object that was created when successful', (done) => {
@@ -50,18 +49,21 @@ describe('Category Model', () => {
             Category.create({
                 name: categoryName
             })
-            .catch((err) => {
-                console.error(err);
-            });
-
-            Category.create()
-            .then((category) => {
-                done('Invalidation of name did not work.');
+            .then(() => {
+                Category.create({
+                    name: categoryName
+                })
+                .then((category) => {
+                    done('Invalidation of name did not work.');
+                })
+                .catch((err) => {
+                    if (err.errors[0].validatorKey === 'isUnique') {
+                        done();
+                    }
+                });
             })
             .catch((err) => {
-                if (err.errors[0].message) {
-                    done();
-                }
+                console.error(err);
             });
         });
 
@@ -76,4 +78,52 @@ describe('Category Model', () => {
             });
         })
     });
+
+    describe('Can get a list of all categories', () => {
+        beforeEach(() => {
+            Category.bulkCreate([{
+                name: 'testCategory1'
+            }, {
+                name: 'testCategory2'
+            }])
+            .catch((err) => {
+                console.error(err);
+            })
+        });
+
+        // it('returns an array', (done) => {
+        //     Category.findAll()
+        //     .then((categories) => {
+        //         expect(categories).to.be.an('array');
+        //         done();
+        //     })
+        //     .catch((err) => {
+        //         console.error(err);
+        //         done(err);
+        //     })
+        // });
+
+        it('contains category objects inside the array', (done) => {
+            Category.findAll()
+            .then((categories) => {
+                // const nameCheck = categories.every((category) => {
+                //     const categoryName = category.name;
+                //     console.log('categoryName:', categoryName);
+                //     return categoryName && categoryName === 'testCategory1' || categoryName === 'testCategory2';
+                // });
+                console.log(categories);
+
+                const categoriesMatched = categories.filter((category) => {
+                    const categoryName = category.name;
+                    return categoryName === 'testCategory1' || categoryName === 'testCategory2';
+                })
+
+                chai.expect(categoriesMatched).to.have.lengthOf(2);
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            })
+        })
+    })
 });
