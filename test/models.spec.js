@@ -80,8 +80,11 @@ describe('Category Model', () => {
     });
 
     describe('Can get a list of all categories', () => {
+        const testCategoryName1 = 'testCategory1';
+        const testCategoryName2 = 'testCategory2';
+
         beforeEach(() => {
-            Category.bulkCreate([{
+            return Category.bulkCreate([{
                 name: 'testCategory1'
             }, {
                 name: 'testCategory2'
@@ -91,39 +94,63 @@ describe('Category Model', () => {
             })
         });
 
-        // it('returns an array', (done) => {
-        //     Category.findAll()
-        //     .then((categories) => {
-        //         expect(categories).to.be.an('array');
-        //         done();
-        //     })
-        //     .catch((err) => {
-        //         console.error(err);
-        //         done(err);
-        //     })
-        // });
+        it('returns an array', (done) => {
+            Category.findAll()
+            .then((categories) => {
+                expect(categories).to.be.an('array');
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(err);
+            })
+        });
 
         it('contains category objects inside the array', (done) => {
             Category.findAll()
             .then((categories) => {
-                // const nameCheck = categories.every((category) => {
-                //     const categoryName = category.name;
-                //     console.log('categoryName:', categoryName);
-                //     return categoryName && categoryName === 'testCategory1' || categoryName === 'testCategory2';
-                // });
-                console.log(categories);
-
                 const categoriesMatched = categories.filter((category) => {
                     const categoryName = category.name;
                     return categoryName === 'testCategory1' || categoryName === 'testCategory2';
-                })
+                });
 
                 chai.expect(categoriesMatched).to.have.lengthOf(2);
                 done();
             })
             .catch((err) => {
                 done(err);
+            });
+        });
+
+        afterEach(() => {
+            Category.destroy({
+                where: {
+                    name: testCategoryName1
+                }
             })
-        })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Category.destroy({
+                where: {
+                    name: testCategoryName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
+    });
+
+    describe('Can update a category', (done) => {
+        // if we update fields AND specify fields we want updated
+            // then it only updates those fields
+
+        // if we update without specifying fields
+            // the entire row is updated/replaced
+
+        // if we update the name field
+            // validate should work
     })
 });
