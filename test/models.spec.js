@@ -144,13 +144,82 @@ describe('Category Model', () => {
     });
 
     describe('Can update a category', (done) => {
-        // if we update fields AND specify fields we want updated
-            // then it only updates those fields
+        const testCategoryName1 = 'testCategory1';
+        const testCategoryName2 = 'testCategory2';
+        const testCategoryName3 = 'testCategory3';
 
-        // if we update without specifying fields
-            // the entire row is updated/replaced
+        beforeEach(() => {
+            return Category.bulkCreate([{
+                name: testCategoryName1
+            }, {
+                name: testCategoryName2
+            }])
+            .catch((err) => {
+                console.error(err);
+            })
+        });
 
-        // if we update the name field
-            // validate should work
+        it('if we update the name field of a category with an a valid name, it returns an updated count of 1', (done) => {
+            Category.update({
+                name: testCategoryName3
+            }, {
+                where: {
+                    name: testCategoryName1
+                }
+            })
+            .then((updatedCount) => {
+                chai.expect(updatedCount).to.be.an('array').that.includes(1);
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
+
+        it('if we update the name field with an incorrect name, it returns an error', (done) => {
+            Category.update({
+                name: testCategoryName1
+            }, {
+                where: {
+                    name: ''
+                }
+            })
+            .then((updatedCount) => {
+                done('Updated row when it shouldnt have');
+            })
+            .catch((err) => {
+                chai.expect(err.errors[0].validationError).to.have.length
+                done();
+            });
+        });
+
+        afterEach(() => {
+            Category.destroy({
+                where: {
+                    name: testCategoryName1
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Category.destroy({
+                where: {
+                    name: testCategoryName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Category.destroy({
+                where: {
+                    name: testCategoryName3
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
     })
 });

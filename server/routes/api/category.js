@@ -50,9 +50,9 @@ router.patch('/:id', (req, res) => {
 
     Category.update(req.body, {
         where: {id},
-        fields: Object.keys(req.body)
+        // fields: Object.keys(req.body)
     })
-    .then((updatedCount) => {
+    .then(([updatedCount]) => {
         if (updatedCount > 0) {
             res.sendStatus(204);
         } else {
