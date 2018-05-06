@@ -5,23 +5,24 @@ const Resource = db.define('resource', {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+        defaultValue: '',
         validate: {
             notEmpty: {
                 args: true,
                 msg: 'Please provide a name.'
             },
-            // TODO: reference for custom validation
-            // isUnique(name) {
-            //     Category.findOne({
-            //         where: {name}
-            //     })
-            //         .then((category) => {
-            //             console.log(category);
-            //             if (category) {
-            //                 throw new Error('This category name already exists.');
-            //             }
-            //         })
-            // }
+            isUnique(name, next) {
+                Category.findOne({
+                    where: {name}
+                })
+                .then((category) => {
+                    const error = category ? new Error('This category name already exists.') : null;
+                    return next(error);
+                })
+                .catch((err) => {
+                    return next(err);
+                });
+            }
         },
     },
     description: {

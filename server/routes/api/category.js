@@ -49,8 +49,7 @@ router.patch('/:id', (req, res) => {
     const name = req.body.name;
 
     Category.update(req.body, {
-        where: {id},
-        // fields: Object.keys(req.body)
+        where: {id}
     })
     .then(([updatedCount]) => {
         if (updatedCount > 0) {

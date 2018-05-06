@@ -15,13 +15,13 @@ const Category = db.define('category', {
                 Category.findOne({
                     where: {name}
                 })
-                    .then((category) => {
-                        const error = category ? new Error('This category name already exists.') : null;
-                        return next(error);
-                    })
-                    .catch((err) => {
-                        return next(err);
-                    });
+                .then((category) => {
+                    const error = category ? new Error('This category name already exists.') : null;
+                    return next(error);
+                })
+                .catch((err) => {
+                    return next(err);
+                });
             }
         }
     }

@@ -7,25 +7,28 @@ router.get('/', (req, res) => {
     Resource.findAll({
         order: [['id', 'ASC']]
     })
-        .then((resources) => {
-            res.status(200).json(resources);
-        })
-        .catch((err) => {
-            res.status(400).send(err);
-        });
+    .then((resources) => {
+        res.status(200).json(resources);
+    })
+    .catch((err) => {
+        res.status(400).send(err);
+    });
 });
 
 router.get('/:id', (req, res) => {
     const id = req.params.resourceId;
 
     Resource.findById(id)
-        .then((resource) => {
+    .then((resource) => {
+        if (resource) {
             res.status(200).json(resource);
-            // TODO: where's da 404 at?
-        })
-        .catch((err) => {
-            res.status(400).send(err);
-        });
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch((err) => {
+        res.status(400).send(err);
+    });
 });
 
 router.post('/', (req, res) => {
@@ -34,12 +37,12 @@ router.post('/', (req, res) => {
     const url = req.body.url || '';
 
     Resource.create({name, description, url})
-        .then((resourceCreated) => {
-            res.status(201).json(resourceCreated);
-        })
-        .catch((err) => {
-            res.status(400).send(err);
-        });
+    .then((resourceCreated) => {
+        res.status(201).json(resourceCreated);
+    })
+    .catch((err) => {
+        res.status(400).send(err);
+    });
 });
 
 router.patch('/:id', (req, res) => {
@@ -52,17 +55,17 @@ router.patch('/:id', (req, res) => {
         where: {id},
         fields: Object.keys(req.body)
     })
-        .then((updatedCount) => {
-            if (updatedCount > 0) {
-                console.log('updated count:', updatedCount);
-                res.sendStatus(204);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        })
+    .then((updatedCount) => {
+        if (updatedCount > 0) {
+            console.log('updated count:', updatedCount);
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+    })
 });
 
 router.delete('/:id', (req, res) => {
@@ -71,16 +74,16 @@ router.delete('/:id', (req, res) => {
     Resource.destroy({
         where: {id}
     })
-        .then((deletedCount) => {
-            if (deletedCount > 0) {
-                res.sendStatus(204);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
+    .then((deletedCount) => {
+        if (deletedCount > 0) {
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+    });
 });
 
 module.exports = router;

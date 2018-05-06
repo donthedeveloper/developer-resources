@@ -221,5 +221,52 @@ describe('Category Model', () => {
                 console.error(err);
             });
         });
-    })
+    });
+
+    describe('Can delete a category', () => {
+        const testCategoryName1 = 'testCategory1';
+        const testCategoryName2 = 'testCategory2';
+
+        beforeEach(() => {
+            return Category.bulkCreate([{
+                name: testCategoryName1
+            }, {
+                name: testCategoryName2
+            }])
+            .catch((err) => {
+                console.error(err);
+            })
+        });
+
+        it('destroy removes a category', () => {
+            Category.destroy({
+                where: {
+                    name: testCategoryName1
+                }
+            })
+            .then((destroyedCount) => {
+                chai.expect(destroyedCount).to.be.a('number', 1);
+            })
+        });
+
+        afterEach(() => {
+            Category.destroy({
+                where: {
+                    name: testCategoryName1
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Category.destroy({
+                where: {
+                    name: testCategoryName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
+    });
 });
