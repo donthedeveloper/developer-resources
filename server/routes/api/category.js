@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
         res.status(200).json(categories);
     })
     .catch((err) => {
-        res.sendStatus(500);
+        res.sendStatus(404);
     });
 });
 
@@ -33,8 +33,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const name = req.body.name;
-
     Category.create(req.body)
     .then((category) => {
         res.status(201).json(category);

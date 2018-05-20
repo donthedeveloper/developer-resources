@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     const id = req.params.resourceId;
 
-    Resource.findById(id)
+    Resource.findById(req.body)
     .then((resource) => {
         if (resource) {
             res.status(200).json(resource);
@@ -32,11 +32,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const name = req.body.name || '';
-    const description = req.body.description || '';
-    const url = req.body.url || '';
-
-    Resource.create({name, description, url})
+    Resource.create(req.body)
     .then((resourceCreated) => {
         res.status(201).json(resourceCreated);
     })

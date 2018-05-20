@@ -12,11 +12,11 @@ const Resource = db.define('resource', {
                 msg: 'Please provide a name.'
             },
             isUnique(name, next) {
-                Category.findOne({
+                Resource.findOne({
                     where: {name}
                 })
-                .then((category) => {
-                    const error = category ? new Error('This category name already exists.') : null;
+                .then((resource) => {
+                    const error = resource ? new Error('This resource name already exists.') : null;
                     return next(error);
                 })
                 .catch((err) => {

@@ -178,10 +178,10 @@ describe('Category Model', () => {
 
         it('if we update the name field with an incorrect name, it returns an error', (done) => {
             Category.update({
-                name: testCategoryName1
+                name: ''
             }, {
                 where: {
-                    name: ''
+                    name: testCategoryName1
                 }
             })
             .then((updatedCount) => {
