@@ -108,44 +108,154 @@ describe('Resource Model', () => {
             expect(resources).to.be.an('array')
         });
 
-        xit('contains resource objects inside that array', (done) => {
-            Resource.findAll()
-            .then((resources) => {
-                const resourcesMatched = resources.filter((resource) => {
-                    const resourceName = resource.name;
-                    return resourceName === 'testResource1' || resourceName === 'testResource2';
-                });
+        it('contains resource objects inside that array', async () => {
+            const resources = await Resource.findAll();
+            const resourcesMatched = resources.filter((resource) => {
+                const resourceName = resource.name;
+                return resourceName === 'testResource1' || resourceName === 'testResource2';
+            });
 
-                chai.expect(resourcesMatched).to.have.lengthOf(2);
-                done();
+            chai.expect(resourcesMatched).to.have.lengthOf(2);
+        });
+
+        afterEach(function() {
+            Resource.destroy({
+                where: {
+                    name: testResourceName1
+                }
             })
             .catch((err) => {
-                done(err);
+                console.error(err);
+            });
+
+            Resource.destroy({
+                where: {
+                    name: testResourceName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
+    });
+
+
+    describe('Can update a resource', (done) => {
+        const testResourceName1 = 'testResource1';
+        const testResourceName2 = 'testResource2';
+        const testResourceName3 = 'testResource3';
+
+        beforeEach(() => {
+            return Resource.bulkCreate([{
+                name: testResourceName1
+            }, {
+                name: testResourceName2
+            }])
+            .catch((err) => {
+                console.error(err);
+            })
+        });
+
+        it('if we update the name field of a resource with an a valid name, it returns an updated count of 1', async () => {
+            const updatedCount = await Resource.update({
+                name: testResourceName3
+            }, {
+                where: {
+                    name: testResourceName1
+                }
+            });
+            chai.expect(updatedCount).to.be.an('array').that.includes(1);
+        });
+
+        it('if we update the name field with an incorrect name, it returns an error', (done) => {
+            Resource.update({
+                name: ''
+            }, {
+                where: {
+                    name: testResourceName1
+                }
+            })
+            .then((updatedCount) => {
+                done('Updated row when it shouldnt have');
+            })
+            .catch((err) => {
+                chai.expect(err.errors[0].validationError).to.have.length
+                done();
             });
         });
 
-        // afterEach(function() {
-        //     Resource.destroy({
-        //         where: {
-        //             name: testResourceName1
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.error(err);
-        //     });
+        afterEach(() => {
+            Resource.destroy({
+                where: {
+                    name: testResourceName1
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
 
-        //     Resource.destroy({
-        //         where: {
-        //             name: testResourceName2
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.error(err);
-        //     });
-        // })
+            Resource.destroy({
+                where: {
+                    name: testResourceName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Resource.destroy({
+                where: {
+                    name: testResourceName3
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
     });
 
-    describe('Can update resource', (done) => {
+    describe('Can delete a resource', () => {
+        const testResourceName1 = 'testResource1';
+        const testResourceName2 = 'testResource2';
 
+        beforeEach(() => {
+            return Resource.bulkCreate([{
+                name: testResourceName1
+            }, {
+                name: testResourceName2
+            }])
+            .catch((err) => {
+                console.error(err);
+            })
+        });
+
+        it('destroy removes a resource', async () => {
+            const destroyedCount = await Resource.destroy({
+                where: {
+                    name: testResourceName1
+                }
+            });
+            chai.expect(destroyedCount).to.be.a('number', 1);
+        });
+
+        afterEach(() => {
+            Resource.destroy({
+                where: {
+                    name: testResourceName1
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            Resource.destroy({
+                where: {
+                    name: testResourceName2
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
     });
 });
