@@ -44,7 +44,6 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     const id = req.params.id;
-    const name = req.body.name;
 
     Category.update(req.body, {
         where: {id}

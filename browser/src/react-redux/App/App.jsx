@@ -1,8 +1,11 @@
 import React from 'react';
+import Categories from './Categories/Categories.react';
 
 const App = (props) => {
     return (
-        <p>Hello!</p>
+        <div>
+            <Categories />
+        </div>
     );
 };
 

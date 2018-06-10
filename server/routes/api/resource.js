@@ -43,13 +43,9 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     const id = req.params.id;
-    const name = req.body.name || ''; // TODO: do we need this?
-    const description = req.body.description;
-    const url = req.body.url || ''; // TODO: do we need this?
 
-    Resource.update({name, description, url}, {
-        where: {id},
-        fields: Object.keys(req.body)
+    Resource.update(req.body, {
+        where: {id}
     })
     .then((updatedCount) => {
         if (updatedCount > 0) {

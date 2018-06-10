@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import {samples} from './App/Sample/reducer.jsx';
+import categories from './App/Categories/Categories.reducer';
 
 const reducers = combineReducers({
-    samples
+    categories
 });
 
 export default reducers;
