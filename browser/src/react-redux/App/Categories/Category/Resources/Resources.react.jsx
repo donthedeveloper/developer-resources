@@ -1,15 +1,17 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {retrieveResources} from './Resources.reducer';
 
 class Resources extends React.Component {
     componentWillMount() {
-        this.props.retrieveResources();
+        this.props.retrieveResources(this.props.categoryName);
     }
 
     render() {
+        console.log('resources:', this.props.resources);
         return (
             <ul>
-                {this.props.map((resource) =>
+                {this.props.resources.map((resource) =>
                     <li>
                         {resource.name}<br />
                         {resource.description}<br />
@@ -26,8 +28,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    retrieveResources: () =>
-        dispatch(retrieveResources)
+    retrieveResources: (categoryName) =>
+        dispatch(retrieveResources(categoryName))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Resources);

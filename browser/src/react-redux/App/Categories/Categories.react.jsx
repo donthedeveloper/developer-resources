@@ -1,6 +1,7 @@
 import React from 'react';
 import {retrieveCategories} from './Categories.reducer';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 class Categories extends React.Component {
     componentWillMount() {
@@ -11,7 +12,9 @@ class Categories extends React.Component {
         return (
             <ul>
                 {this.props.categories.map((category, i) =>
-                    <li key={i}>{category.name}</li>
+                    <li key={i}>
+                        <Link to={`/${category.name}`}>{category.name}</Link>
+                    </li>
                 )}
             </ul>
         );
@@ -19,7 +22,7 @@ class Categories extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    categories: state.categories.categories
+    categories: state.categories
 });
 
 const mapDispatchToProps = (dispatch) => ({

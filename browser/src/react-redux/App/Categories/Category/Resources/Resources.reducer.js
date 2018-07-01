@@ -5,7 +5,7 @@ const RETRIEVE_RESOURCES = 'RETRIEVE_RESOURCES';
 
 // REDUCER
 export default (state=initialState, action) => {
-    // const newState = Object.assign({}, state);
+    let newState = [...initialState];
 
     switch (action.type) {
         case RETRIEVE_RESOURCES:
@@ -23,9 +23,12 @@ const retrieve = (resources) => ({
     resources
 });
 
-export const retrieveResources = () =>
+export const retrieveResources = (categoryName) =>
     dispatch =>
-        axios.get('/api/resource')
+        axios.get(`/api/resource?categoryName=${categoryName}`)
             .then((resources) => {
                 dispatch(retrieve(resources.data))
+            })
+            .catch((err) => {
+                console.log(err);
             });

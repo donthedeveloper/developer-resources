@@ -1,19 +1,17 @@
 import axios from 'axios';
 
-const initialState = ({
-    categories: []
-});
+const initialState = [];
 const RETRIEVE_CATEGORIES = 'RETRIEVE_CATEGORIES';
 
 export default (state=initialState, action) => {
-    const newState = Object.assign({}, state);
+    let newState = [...state];
 
     switch(action.type) {
         case RETRIEVE_CATEGORIES:
-            newState.categories = action.categories
+            newState = action.categories
             break;
-        defaut:
-            return state;
+        default:
+            return initialState;
     }
 
     return newState;

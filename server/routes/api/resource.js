@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-const {Resource} = require('../../models');
+const {Category, Resource} = require('../../models');
 
 router.get('/', (req, res) => {
-    Resource.findAll({
+    const categoryName = req.query.category;
+
+    // const 
+
+    let options = {
         order: [['id', 'ASC']]
-    })
+    };
+    options.where = categoryName ? {categoryName} : null;
+
+    // TODO: get all resources (with category id) when we have category id, so create those relationships
+
+    Resource.findAll(options)
     .then((resources) => {
         res.status(200).json(resources);
     })
